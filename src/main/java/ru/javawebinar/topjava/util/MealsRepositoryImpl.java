@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.MealTo;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 
-public class MealsHolder {
+public class MealsRepository {
     public final AtomicInteger id = new AtomicInteger(5);
     private List<Meal> mealsNotExcess = Arrays.asList(
             new Meal(0, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
@@ -26,19 +27,19 @@ public class MealsHolder {
     );
     private Map<Integer, Meal> mealsId = mealsNotExcess.stream().collect(Collectors.toMap(Meal::getId, m -> m));
 
-    public Map<Integer, Meal> getMeals() {
-        return mealsId;
+    public List<Meal> getAll() {
+        return new ArrayList<>(mealsId.values());
     }
 
-    public void addMeal(Meal meal){
+    public void add(Meal meal){
         mealsId.put(meal.getId(), meal);
     }
 
-    public void deleteMeal(int id){
+    public void delete(int id){
         mealsId.remove(id);
     }
 
-    public Meal getMealById(int id){
+    public Meal getById(int id){
       return mealsId.get(id);
     }
 
