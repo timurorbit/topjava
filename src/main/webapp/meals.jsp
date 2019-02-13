@@ -36,37 +36,22 @@
 <h3>All meals</h3>
 <table class="tg">
 <tr>
-    <th width="150">ID</th>
     <th width="250">LocalDateTime</th>
     <th width="250">Description</th>
     <th width="250">Calories</th>
+    <th width="100">Update</th>
+    <th width="100">Delete</th>
 </tr>
 
 <c:forEach var="meal" items="${requestScope.meals}">
-
-
-    <c:choose>
-    <c:when test="${meal.excess}">
-            <tr style="background-color: red">
-                <td><c:out value="${meal.id}"/></td>
-            <td><c:out value="${f:formatLocalDateTime(meal.dateTime, 'dd.MM.yyyy  HH:mm')}"/></td>
-            <td><c:out value="${meal.description}"/></td>
-            <td><c:out value="${meal.calories}"/></td>
-                <td><a href="meals?action=edit&mealId=<c:out value="${meal.id}"/>">Update</a></td>
-                <td><a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
-            </tr>
-    </c:when>
-        <c:otherwise>                                                                                           <%-- ill deal with this repeating next time ;=) --%>
-                <tr style="background-color: green">
-                    <td><c:out value="${meal.id}"/></td>
-                <td><c:out value="${f:formatLocalDateTime(meal.dateTime, 'dd.MM.yyyy  HH:mm')}"/></td>
+                <tr style="background-color: <c:out value="${meal.excess ? 'Salmon' : 'MediumSeaGreen'}" />">
+                <td><c:out value="${f:formatLocalDateTime(meal.dateTime)}"/></td>
                 <td><c:out value="${meal.description}"/></td>
                 <td><c:out value="${meal.calories}"/></td>
                     <td><a href="meals?action=edit&mealId=<c:out value="${meal.id}"/>">Update</a></td>
                     <td><a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
                 </tr>
-        </c:otherwise>
-    </c:choose>
+
 </c:forEach>
 </table>
 <p><a href="meal?action=add">Add Meal</a></p>

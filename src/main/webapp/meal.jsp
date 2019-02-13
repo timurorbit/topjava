@@ -14,10 +14,10 @@
 </head>
 <body>
 <form method="POST" action='meals' name="frmAddMeal">
-Meal ID : <input type="text" readonly="readonly" name="mealid"
+<input type="text" readonly="readonly" name="mealid" hidden="hidden"
                  value="<c:out value="${meal.id}" />" /> <br />
 DateTime : <input type="text" name="mealDate"
-                  value="<c:out value="${f:formatLocalDateTime(meal.dateTime, 'dd.MM.yyyy. hh:mm')}"/>" /> <br />
+                  value="<c:out value="${f:formatLocalDateTime(meal.dateTime)}"/>" /> <br />
 Description : <input type="text" name="mealdescription"
                   value="<c:out value="${meal.description}" />" /> <br />
 Calories : <input type="text" name="mealcalories"
