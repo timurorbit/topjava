@@ -21,7 +21,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
-        return userRepository.remove(id, userRepository.get(id));
+        return userRepository.remove(id) != null;
     }
 
     @Override
@@ -47,17 +47,15 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         return userRepository
                 .values()
                 .stream()
-                .sorted(Comparator.comparing(AbstractNamedEntity::getName))
+                .sorted(Comparator.comparing(AbstractNamedEntity::getName).thenComparing(AbstractNamedEntity::getId))
                 .collect(Collectors.toList());
     }
 
     @Override
     public User getByEmail(String email) {
-        for (Map.Entry<Integer, User> entry : userRepository.entrySet()){
-         if (entry.getValue().getEmail().equals(email)){
-             return entry.getValue();
-         }
-        }
-        return null;
+        return userRepository.values()
+                .stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst().orElse(null);
     }
 }
