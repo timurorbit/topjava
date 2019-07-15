@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -42,7 +44,7 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
-        Meal meal = new Meal(1, id.isEmpty() ? null : Integer.valueOf(id),
+        Meal meal = new Meal(SecurityUtil.authUserId(), id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
@@ -77,9 +79,24 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
+                String filter = request.getParameter("filter");
                 log.info("getAll");
-                request.setAttribute("meals",
-                        MealsUtil.getWithExcess(controller.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                if ("filter".equals(filter)){
+                    String startDate = request.getParameter("startDate");
+                    String endDate = request.getParameter("endDate");
+                    String startTime = request.getParameter("startTime");
+                    String endTime = request.getParameter("endTime");
+
+                    LocalDate lStartDate = startDate.isEmpty() ? null : LocalDate.parse(startDate);
+                    LocalDate lendDate = endDate.isEmpty() ? null : LocalDate.parse(endDate);
+                    LocalTime lStartTime = startTime.isEmpty() ? null : LocalTime.parse(startTime);
+                    LocalTime lendTime = endTime.isEmpty() ? null : LocalTime.parse(endTime);
+
+                    request.setAttribute("meals", controller.getAllFilteredByDateTime(lStartTime, lendTime, lStartDate, lendDate));
+                } else {
+                    request.setAttribute("meals",
+                            controller.getAllFilteredByDateTime(LocalTime.MIN, LocalTime.MAX, LocalDate.MIN, LocalDate.MAX));
+                }
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

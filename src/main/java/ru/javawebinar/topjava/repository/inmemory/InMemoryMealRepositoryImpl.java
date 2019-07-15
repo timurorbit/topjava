@@ -4,8 +4,11 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,6 +65,14 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
         return listMeals == null ? new ArrayList<>() : listMeals;
+    }
+
+    @Override
+    public Collection<Meal> getAllFilteredByDate(int userId,  LocalDate startDate, LocalDate endDate) {
+        return getAll(userId)
+                .stream()
+                .filter(m -> DateTimeUtil.isBetween(m.getDate(), startDate, endDate))
+                .collect(Collectors.toList());
     }
 
 }

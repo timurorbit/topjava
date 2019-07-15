@@ -18,6 +18,13 @@
 </head>
 <body>
 <section>
+    <form>
+        <label>From date: <input type="date" name="startDate" value="${param.startDate}"></label>
+        <label>To date: <input type="date" name="endDate" value="${param.endDate}"></label><br/><br/><br/>
+        <label>From time: <input type="time" name="startTime" value="${param.startTime}"></label>
+        <label>To time: <input type="time" name="endTime" value="${param.endTime}"></label>
+        <input type="submit" value="filter" name="filter">
+    </form>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
