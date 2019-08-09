@@ -1,19 +1,46 @@
 package ru.javawebinar.topjava.model;
 
+import javax.persistence.*;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.getALL, query = "SELECT m from Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.user.id =:userId and m.id=:id")
+})
+@Entity
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"})})  // , uniqueConstraints = {@UniqueConstraint(columnNames = "dateTime", name = "meals_unique_dateTime_idx")}
 public class Meal extends AbstractBaseEntity {
+
+    public static final String getALL = "Meal.getAll";
+    public static final String DELETE = "Meal.delete";
+
+    @Column(name = "date_time")
+    @DateTimeFormat
+    @NotBlank
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 100)
     private String description;
 
+    @Column(name = "calories", nullable = false, columnDefinition = "int default 500")
+    @Range(min = 10, max = 10000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
