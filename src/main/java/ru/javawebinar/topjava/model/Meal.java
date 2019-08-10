@@ -25,8 +25,6 @@ public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
 
     @Column(name = "date_time")
-    @DateTimeFormat
-    @NotBlank
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
