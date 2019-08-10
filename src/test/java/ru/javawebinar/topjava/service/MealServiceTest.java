@@ -1,7 +1,12 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,6 +30,30 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
+
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
+    @Rule
+    public final Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void succeeded(long nanos, Description description) {
+            String result = description.getMethodName().contains("NotFound") ? "failed" : "succeed";
+            report(description.getMethodName(), result, nanos);
+        }
+
+        @Override
+        protected void failed(long nanos, Throwable e, Description description) {
+            String result = "failed";
+            if (description.getMethodName().contains("NotFound") && e.getClass().equals(NotFoundException.class)){
+                result = "succeed";
+            }
+            report(description.getMethodName(), result, nanos);
+        }
+        private void report(String testName, String result, long nanos){
+            String msg = "test " + testName + " " + result + " time in nano seconds " + nanos;
+            log.info(msg);
+        }
+    };
 
     @Autowired
     private MealService service;
