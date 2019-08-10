@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @NamedQueries({
         @NamedQuery(name = Meal.getALL, query = "SELECT m from Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.user.id =:userId and m.id=:id")
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.user.id =:userId AND m.id=:id")
 })
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"})})  // , uniqueConstraints = {@UniqueConstraint(columnNames = "dateTime", name = "meals_unique_dateTime_idx")}
