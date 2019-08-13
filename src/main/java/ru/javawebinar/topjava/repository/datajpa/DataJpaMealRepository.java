@@ -1,11 +1,13 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,11 +19,11 @@ public class DataJpaMealRepository implements MealRepository {
     private CrudMealRepository crudMealRepository;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Override
     public Meal save(Meal meal, int userId) {
-        User ref = userService.get(userId);
+        User ref = userServiceImpl.get(userId);
             meal.setUser(ref);
             crudMealRepository.save(meal);
             return meal;

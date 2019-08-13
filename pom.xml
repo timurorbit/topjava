@@ -115,6 +115,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- idk wut -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
         <!-- Cache -->
         <dependency>
             <groupId>javax.cache</groupId>
@@ -180,6 +187,8 @@
                 </dependency>
             </dependencies>
         </profile>
+
+
 
         <profile>
             <id>postgres</id>
