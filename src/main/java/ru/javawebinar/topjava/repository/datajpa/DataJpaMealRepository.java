@@ -21,8 +21,10 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        User ref = userService.get(userId);
-        meal.setUser(ref);
+        if (!meal.isNew() && get(meal.getId(), userId) == null) {
+            return null;
+        }
+        meal.setUser(userService.get(userId));
         crudMealRepository.save(meal);
         return meal;
     }
@@ -34,7 +36,8 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return crudMealRepository.get(id, userId);
+        Meal meal = crudMealRepository.findById(id).orElse(null);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;
     }
 
     @Override
@@ -44,6 +47,6 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return crudMealRepository.findAllBetween(userId, startDate, endDate);
+        return crudMealRepository.findAllBetween(startDate, endDate, userId);
     }
 }
