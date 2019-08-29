@@ -33,7 +33,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles("hsqldb")
+@ActiveProfiles("postgres")
 public abstract class MealServiceTest extends ServiceTest {
 
     @Autowired
